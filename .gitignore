@@ -73,5 +73,7 @@ doc/generated
 
 # Generated files
 bitshuffle/ext.c
-bitshuffle/h5.c
+
+# Local user config
+setup.cfg
 

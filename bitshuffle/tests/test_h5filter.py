@@ -12,8 +12,6 @@ from subprocess import Popen, PIPE, STDOUT
 from bitshuffle import h5
 
 
-os.environ["HDF5_PLUGIN_PATH"] = ""
-
 
 class TestFilter(unittest.TestCase):
 

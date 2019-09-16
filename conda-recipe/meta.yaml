@@ -14,12 +14,9 @@ requirements:
         - setuptools
         - cython
         - numpy
-        - h5py
-        - hdf5
     run:
         - python
         - numpy
-        - h5py
         - cython
 
 about:

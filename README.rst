@@ -1,3 +1,17 @@
+===============
+Bitshuffle Less
+===============
+
+This is a fork of Kiyoshi Wesley Masui's that has been radically pared-down to 
+remove both the HDF5 and LZF support. This makes the package far easier to 
+build an maintain. 
+
+Better support for AVX2 and SSE2 SIMD instruction sets was also added at 
+compile time. In particular the compiler was not checking for MSVC flags for 
+AVX2 or SSE2 on Windows. This does, however, require the `cpufeature` module, 
+which is available via pip.
+
+
 ==========
 Bitshuffle
 ==========

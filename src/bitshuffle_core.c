@@ -16,17 +16,21 @@
 #include <string.h>
 
 
-#if defined(__AVX2__) && defined (__SSE2__)
-#define USEAVX2
+#ifdef _M_X64 // MSVC x64 always has SSE2 support, but doesn't define __SSE2__ macro
+    #define USESSE2
+// TODO: potential for SSE2 support in MSVC x86
+#elif defined(__SSE2__)
+    #define USESSE2
 #endif
 
-#if defined(__SSE2__)
-#define USESSE2
+#if defined(__AVX2__) && defined(USESSE2)
+    #define USEAVX2
 #endif
 
 #if defined(__ARM_NEON__) || (__ARM_NEON)
 #define USEARMNEON
 #endif
+
 
 // Conditional includes for SSE2 and AVX2.
 #ifdef USEAVX2
@@ -1081,7 +1085,11 @@ int64_t bshuf_trans_byte_elem_SSE(const void* in, void* out, const size_t size,
         } else {
             // Not used since scalar algorithm is faster.
             nchunk_elem = elem_size / 2;
+#ifdef _WIN32 // Windows doesn't defined `int16_t`
+            TRANS_ELEM_TYPE(in, out, size, nchunk_elem, __int16);
+#else
             TRANS_ELEM_TYPE(in, out, size, nchunk_elem, int16_t);
+#endif
             count = bshuf_trans_byte_elem_SSE_16(out, tmp_buf,
                     size * nchunk_elem);
             bshuf_trans_elem(tmp_buf, out, 2, nchunk_elem, size);
