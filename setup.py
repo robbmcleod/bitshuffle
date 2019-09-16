@@ -14,6 +14,7 @@ import subprocess
 import sys
 import platform
 from cpufeature import CPUFeature
+import glob
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 3
@@ -119,14 +120,19 @@ def pkgconfig(*packages, **kw):
     return config
 
 
+LZ4_DIR = glob.glob('lz4-*')
+if len(LZ4_DIR) > 1:
+    raise ValueError('There can be only one LZ4 library subdirectory in the package')
+LZ4_DIR = LZ4_DIR[0]
+
 ext_bshuf = Extension(
     "bitshuffle.ext",
     sources=["bitshuffle/ext.pyx", "src/bitshuffle.c",
              "src/bitshuffle_core.c", "src/iochain.c",
-             "lz4/lz4.c"],
-    include_dirs=["src/", "lz4/"],
+             path.join(LZ4_DIR, "lz4.c")],
+    include_dirs=["src/", LZ4_DIR],
     depends=["src/bitshuffle.h", "src/bitshuffle_core.h",
-             "src/iochain.h", "lz4/lz4.h"],
+             "src/iochain.h", path.join(LZ4_DIR, "lz4.h")],
     libraries=[],
     define_macros=MACROS,
 )
